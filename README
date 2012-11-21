@@ -1,0 +1,7 @@
+Requires Python 3. 
+
+Tested on Windows but should work on Linux/OS X.
+
+usage: manfuzzer.py [-h] [-d] [-c COMBINATIONS] [-o OUTFILE] [-m MEAN]
+                    [-s STDDEV]
+                    executable

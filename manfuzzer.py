@@ -90,7 +90,7 @@ def main():
 
 def extract_arguments(command):
     try:
-        child = subprocess.Popen(command,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+        child = subprocess.Popen(command,stdout=subprocess.PIPE,stderr=subprocess.PIPE,shell=True)
         child_output = child.communicate()
         logging.debug(child_output)
         matches = re.findall(MAGIC_REGEX,repr(child_output))

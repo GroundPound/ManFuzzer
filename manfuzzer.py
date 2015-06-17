@@ -132,7 +132,7 @@ def main():
     int32gen = Int32ValueGenerator()
 
     sumprobs = sum([textprob, fileprob, int32prob])
-    valuegens = set([(textprob/sumprobs, textgen), (fileprob/sumprobs, filegen), (int32prob/sumprobs, int32gen)])
+    valuegens = {(textprob/sumprobs, textgen), (fileprob/sumprobs, filegen), (int32prob/sumprobs, int32gen)}
 
     legacy = args.legacy
     generator = lambda : generate_testcases(executable, argumentgenerator, valuegens, testcases = testcases, paramsmean = paramsmean, paramsstddev = paramsstddev, valuesprob = valuesprob,programinputprob = programinputprob, stdinprob = stdinprob) 

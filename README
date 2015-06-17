@@ -1,7 +1,9 @@
-Requires Python 3. 
+# The ManFuzzer
 
-Tested on Windows but should work on Linux/OS X.
+The ManFuzzer produces test cases for an executable
+based on a grammar generated from `-h`, `-H`, `--help` and
+the manual page, with the option to execute those test cases.
 
-usage: manfuzzer.py [-h] [-d] [-c COMBINATIONS] [-o OUTFILE] [-m MEAN]
-                    [-s STDDEV]
-                    executable
+The ManFuzzer was created by Peter Chapman in 2012.
+Recently the ManFuzzer was modified and used for a [large-scale
+experiment on vulnerability prediction](http://www.vdiscover.org/OS-fuzzing.html).

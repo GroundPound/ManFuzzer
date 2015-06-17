@@ -1,10 +1,19 @@
-'''
+"""
 Created on Dec 30, 2012
 
-@author: Peter
-'''
+@author: Peter, GGrieco
+"""
 import random
 import string
+
+
+class Int32ValueGenerator(object):
+    """
+    Generates 32-bit integer values.
+    """
+
+    def generate(self):
+        return str(random.randint(-2**31, 2**31 - 1))
 
 class DataValueGenerator(object):
     '''

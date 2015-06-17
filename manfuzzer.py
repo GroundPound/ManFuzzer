@@ -1,4 +1,6 @@
-'''   Copyright 2012 Peter Chapman
+#!/usr/bin/python3
+
+"""   Copyright 2015 Peter Chapman, GGrieco
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -14,7 +16,7 @@
 
 The ManFuzzer: Given a binary path this file produces test cases to that binary
 based on the flags found in -h,-H,--help and the man page. There is also the
-option to execute those test cases.'''
+option to execute those test cases."""
 
 import argparse
 import logging
@@ -25,6 +27,8 @@ import time
 import subprocess
 from values.textgen import TextValueGenerator
 from values.filegen import FileValueGenerator
+from values.datagen import Int32ValueGenerator
+
 import legacymanfuzzer
 import os
 import signal
@@ -40,6 +44,7 @@ DEFAULT_TEXT_STDDEV = 100
 DEFAULT_FILE_PROB = 1
 DEFAULT_FILE_MEAN = 20
 DEFAULT_FILE_STDDEV = 100
+DEFAULT_INT32_PROB = 1
 DEFAULT_PROGRAM_INPUT_PROB = 0.05
 DEFAULT_STDIN_PROB = 0.05
 DEFAULT_TIMEOUT = 3
@@ -66,6 +71,7 @@ def main():
     argparser.add_argument('--fileprob',help="The probability file values will be used. The default probability is uniform between the other value types.", type=float, default=DEFAULT_FILE_PROB)           
     argparser.add_argument('--filemean',help="The mean length of generated text values. The default mean length is %d." % DEFAULT_FILE_MEAN, type=float, default=DEFAULT_FILE_MEAN)
     argparser.add_argument('--filestddev', help="The standard deviation in the length of generated file values in bytes. The default is %d." % DEFAULT_FILE_STDDEV, type=float, default=DEFAULT_FILE_STDDEV)
+    argparser.add_argument('--int32prob',help="The probability 32-bit integer values will be used. The default probability is uniform between the other value types.", type=float, default=DEFAULT_INT32_PROB)
     argparser.add_argument('--programinputprob', help="The probability of giving the entire program an input. The default is %d." % DEFAULT_PROGRAM_INPUT_PROB, type=float, default=DEFAULT_PROGRAM_INPUT_PROB)
     argparser.add_argument('--stdinprob', help="The probability of feeding a file in through standard input. The default is %d." % DEFAULT_STDIN_PROB, type=float, default=DEFAULT_STDIN_PROB)
     argparser.add_argument('--legacy', help="Runs manfuzzer in the legacy mode that performs better magically for certain inputs.", action="store_true")
@@ -122,9 +128,11 @@ def main():
     fileprob = args.fileprob
     filegen = FileValueGenerator(filemean,filestddev)
     
-    
-    sumprobs = sum([textprob,fileprob])
-    valuegens = set([(textprob/sumprobs,textgen),(fileprob/sumprobs,filegen)])
+    int32prob = args.int32prob
+    int32gen = Int32ValueGenerator()
+
+    sumprobs = sum([textprob, fileprob, int32prob])
+    valuegens = set([(textprob/sumprobs, textgen), (fileprob/sumprobs, filegen), (int32prob/sumprobs, int32gen)])
 
     legacy = args.legacy
     generator = lambda : generate_testcases(executable, argumentgenerator, valuegens, testcases = testcases, paramsmean = paramsmean, paramsstddev = paramsstddev, valuesprob = valuesprob,programinputprob = programinputprob, stdinprob = stdinprob) 
